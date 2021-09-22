@@ -13,6 +13,8 @@ function App() {
     color: null,
   });
 
+  const [itemToEdit, setItemToEdit] = useState({});
+
   useEffect(() => {
     if (!alertMessage.text) {
       return;
@@ -30,17 +32,50 @@ function App() {
   }, [alertMessage]);
 
   const addItemHandler = (item) => {
+    const existingItemIndex = groceryItems.findIndex((groceryItem) => groceryItem.id === item.id);
+
+    if (existingItemIndex > -1) {
+      const updatedItems = [...groceryItems];
+      updatedItems[existingItemIndex] = item;
+      setGroceryItems(updatedItems);
+      setItemToEdit({});
+      return;
+    }
+
     setGroceryItems((prevItems) => {
       return [...prevItems, item];
     });
   };
+
+  const actionHandler = (item) => {
+    if (item.action === "edit") {
+      setItemToEdit(item);
+    }
+
+    if (item.action === "remove") {
+      const updatedGroceries = groceryItems.filter((groceryItem) => groceryItem.id !== item.id);
+      setGroceryItems(updatedGroceries);
+      setAlertMessage({ text: "Item Removed", color: "red" });
+    }
+  };
+
+  const clearListHandler = () => {
+    setGroceryItems([]);
+    setItemToEdit({});
+    setAlertMessage({ text: "Empty List", color: "red" });
+  };
+
   return (
     <Card>
       {alertMessage.text && <Alert message={alertMessage} />}
       <h2 className='app-title'>Grocery Bud</h2>
-      <GroceryForm itemAdded={addItemHandler} alert={setAlertMessage} />
-      <GroceryList items={groceryItems} />
-      {groceryItems.length > 0 && <button className='btn'>Clear Items</button>}
+      <GroceryForm itemAdded={addItemHandler} alert={setAlertMessage} itemToEdit={itemToEdit} />
+      <GroceryList items={groceryItems} action={actionHandler} />
+      {groceryItems.length > 0 && (
+        <button onClick={clearListHandler} className='btn'>
+          Clear Items
+        </button>
+      )}
     </Card>
   );
 }

@@ -1,4 +1,5 @@
 .card {
+  position: relative;
   text-align: center;
   margin: 7rem auto;
   padding: 1.5rem;
