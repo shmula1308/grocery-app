@@ -1,0 +1,23 @@
+.alert {
+  display: none;
+  padding: 0.2em 0;
+  border-radius: 3px;
+  margin-bottom: 1em;
+}
+
+.alert p {
+  font-size: 0.7rem;
+  margin: 0;
+}
+
+.success {
+  display: block;
+  color: #155724;
+  background-color: #d4edda;
+}
+
+.alertUser {
+  display: block;
+  color: #721c24;
+  background-color: #f8d7da;
+}

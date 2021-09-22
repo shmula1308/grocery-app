@@ -1,0 +1,42 @@
+.item {
+  display: flex;
+  padding: 0.5em 1em;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 4px;
+}
+
+.item:hover {
+  background-color: #f1f5f8;
+  transition: 0.3s ease-in-out;
+}
+
+.item p {
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.actions {
+  font-size: 0.8rem;
+}
+
+.remove {
+  cursor: pointer;
+  color: #e66b6b;
+  transition: 0.4s ease-in-out;
+}
+
+.remove:hover {
+  color: #bb2525;
+}
+
+.edit {
+  cursor: pointer;
+  color: #6be675;
+  margin-right: 5px;
+  transition: 0.4s ease-in-out;
+}
+
+.edit:hover {
+  color: #25bb32;
+}
