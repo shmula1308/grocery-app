@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-
 import "./App.css";
 import Card from "./UI/Card";
 import GroceryForm from "./Components/GroceryForm";
@@ -13,7 +12,9 @@ function App() {
     color: null,
   });
 
-  const [itemToEdit, setItemToEdit] = useState({});
+  const [enteredText, setEnteredText] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
+  const [itemToEditId, setItemToEditId] = useState(null);
 
   useEffect(() => {
     if (!alertMessage.text) {
@@ -38,7 +39,6 @@ function App() {
       const updatedItems = [...groceryItems];
       updatedItems[existingItemIndex] = item;
       setGroceryItems(updatedItems);
-      setItemToEdit({});
       return;
     }
 
@@ -49,7 +49,9 @@ function App() {
 
   const actionHandler = (item) => {
     if (item.action === "edit") {
-      setItemToEdit(item);
+      setIsEditing(true);
+      setEnteredText(item.name);
+      setItemToEditId(item.id);
     }
 
     if (item.action === "remove") {
@@ -61,7 +63,7 @@ function App() {
 
   const clearListHandler = () => {
     setGroceryItems([]);
-    setItemToEdit({});
+    setEnteredText("");
     setAlertMessage({ text: "Empty List", color: "red" });
   };
 
@@ -69,7 +71,16 @@ function App() {
     <Card>
       {alertMessage.text && <Alert message={alertMessage} />}
       <h2 className='app-title'>Grocery Bud</h2>
-      <GroceryForm itemAdded={addItemHandler} alert={setAlertMessage} itemToEdit={itemToEdit} />
+      <GroceryForm
+        itemAdded={addItemHandler}
+        alert={setAlertMessage}
+        inputText={enteredText}
+        setInputText={setEnteredText}
+        isEditing={isEditing}
+        setIsEditing={setIsEditing}
+        itemToEditId={itemToEditId}
+        setItemToEditId={setItemToEditId}
+      />
       <GroceryList items={groceryItems} action={actionHandler} />
       {groceryItems.length > 0 && (
         <button onClick={clearListHandler} className='btn'>

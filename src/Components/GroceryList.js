@@ -6,7 +6,6 @@ const GroceryList = (props) => {
     props.action(item);
   };
 
-  console.log("insidelist", props.items);
   return (
     <ul className={classes.list}>
       {props.items.map((item) => {

@@ -1,59 +1,49 @@
-import { useState, useEffect } from "react";
 import classes from "./GroceryForm.module.css";
 
 const GroceryForm = (props) => {
-  const { itemToEdit } = props;
-  const [enteredText, setEnteredText] = useState("");
-
-  useEffect(() => {
-    if (!itemToEdit.name) {
-      setEnteredText("");
-      return;
-    }
-    setEnteredText(itemToEdit.name);
-  }, [itemToEdit.name]);
-
   const itemSubmitHandler = (ev) => {
     ev.preventDefault();
-    const inputText = enteredText.trim();
+    const inputText = props.inputText.trim();
 
     if (!inputText.length) {
       props.alert({ text: "Please Enter A Value", color: "red" });
       return;
     }
 
-    if (itemToEdit.name) {
+    if (props.isEditing) {
       const item = {
-        id: itemToEdit.id,
-        name: enteredText,
+        id: props.itemToEditId,
+        name: props.inputText,
       };
 
       props.itemAdded(item);
       props.alert({ text: "Item Has Been Edited", color: "green" });
-      setEnteredText("");
+      props.setInputText("");
+      props.setIsEditing(false);
+      props.setItemToEditId(null);
       return;
     }
 
     const item = {
       id: (Math.random() * 100).toString(),
-      name: enteredText,
+      name: props.inputText,
     };
 
     props.itemAdded(item);
 
     props.alert({ text: "Item Added To The List", color: "green" });
-    setEnteredText("");
+    props.setInputText("");
   };
 
   const inputChangeHandler = (ev) => {
-    setEnteredText(ev.target.value);
+    props.setInputText(ev.target.value);
   };
 
   return (
     <form onSubmit={itemSubmitHandler}>
       <div className={classes.control}>
-        <input value={enteredText} onChange={inputChangeHandler} type='text' placeholder='e.g. eggs' />
-        <button type='submit'>{itemToEdit.name ? "Edit" : "Submit"}</button>
+        <input value={props.inputText} onChange={inputChangeHandler} type='text' placeholder='e.g. eggs' />
+        <button type='submit'>{props.isEditing ? "Edit" : "Submit"}</button>
       </div>
     </form>
   );
