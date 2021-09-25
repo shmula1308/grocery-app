@@ -5,8 +5,10 @@ import GroceryForm from "./Components/GroceryForm";
 import Alert from "./Components/Alert";
 import GroceryList from "./Components/GroceryList";
 
+let storedItems = JSON.parse(localStorage.getItem("groceryList"));
+
 function App() {
-  const [groceryItems, setGroceryItems] = useState([]);
+  const [groceryItems, setGroceryItems] = useState(storedItems || []);
   const [alertMessage, setAlertMessage] = useState({
     text: "",
     color: null,
@@ -39,11 +41,14 @@ function App() {
       const updatedItems = [...groceryItems];
       updatedItems[existingItemIndex] = item;
       setGroceryItems(updatedItems);
+      localStorage.setItem("groceryList", JSON.stringify(updatedItems));
       return;
     }
 
     setGroceryItems((prevItems) => {
-      return [...prevItems, item];
+      const updatedItems = [...prevItems, item];
+      localStorage.setItem("groceryList", JSON.stringify(updatedItems));
+      return updatedItems;
     });
   };
 
@@ -55,8 +60,9 @@ function App() {
     }
 
     if (item.action === "remove") {
-      const updatedGroceries = groceryItems.filter((groceryItem) => groceryItem.id !== item.id);
-      setGroceryItems(updatedGroceries);
+      const updatedItems = groceryItems.filter((groceryItem) => groceryItem.id !== item.id);
+      setGroceryItems(updatedItems);
+      localStorage.setItem("groceryList", JSON.stringify(updatedItems));
       setAlertMessage({ text: "Item Removed", color: "red" });
     }
   };
